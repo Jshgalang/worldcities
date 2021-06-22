@@ -33,10 +33,12 @@ namespace WorldCities.Data.Models
         /// <summary>
         /// City Latitude
         /// </summary>
+        [Column(TypeName = "decimal(7,4)")]
         public decimal Lat { get; set; }
         ///<summary>
         /// City Longitude
         /// </summary>
+        [Column(TypeName = "decimal(7,4)")]
         public decimal Lon { get; set; }
         ///<summary>
         ///Country Id (foreign key)
