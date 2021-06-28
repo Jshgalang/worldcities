@@ -30,16 +30,19 @@ namespace WorldCities.Data.Models
         /// city name
         /// </summary>
         public string Name_ASCII { get; set; }
+
         /// <summary>
         /// City Latitude
         /// </summary>
         [Column(TypeName = "decimal(7,4)")]
         public decimal Lat { get; set; }
+
         ///<summary>
         /// City Longitude
         /// </summary>
         [Column(TypeName = "decimal(7,4)")]
         public decimal Lon { get; set; }
+
         ///<summary>
         ///Country Id (foreign key)
         ///</summary>

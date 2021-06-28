@@ -24,6 +24,15 @@ namespace WorldCities
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            // Json front-end serializer look
+            services.AddControllersWithViews().AddJsonOptions(options =>
+            {
+                {
+                    options.JsonSerializerOptions.WriteIndented = true;
+                }
+            });
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
