@@ -31,11 +31,11 @@ namespace WorldCities.Controllers
 		//}
 
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<City>>> GetCities()
+		public async Task<ActionResult<ApiResult<City>>> GetCities(int pageIndex=0, int pageSize=10)
 		{
-			//return this.Ok(_context.Cities.Where(p => p.Lat >= 0));
-			//return _context.Cities;
-			return await _context.Cities.Where(p => p.Lat >= 0).ToListAsync();
+			return await ApiResult<City>.CreateAsync(_context.Cities, pageIndex, pageSize);
+			//return await _context.Cities.Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
+			//return await _context.Cities.Where(p => p.Lat >= 0).ToListAsync();
         }
 
 		[HttpGet("{id}")]

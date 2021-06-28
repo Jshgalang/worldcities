@@ -1,5 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 import { City } from './city';
 
 @Component({
@@ -10,14 +12,16 @@ import { City } from './city';
 
 export class CitiesComponent implements OnInit {
   public displayedColumns: string[] = ['id', 'name', 'lat', 'lon'];  
-  public cities: City[];
+  public cities: MatTableDataSource<City>;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
-  constructor(private hthtp: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
   }
 
   ngOnInit(){
-    this.hthtp.get<City[]>(this.baseUrl + 'api/Cities').subscribe(result => {
-      this.cities = result;
+    this.http.get<City[]>(this.baseUrl + 'api/Cities').subscribe(result => {
+      this.cities = new MatTableDataSource<City>(result);
+      this.cities.paginator = this.paginator;
     }, error => console.error(error));
   }
 }
