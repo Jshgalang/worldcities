@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Reflection;
 
 namespace WorldCities.Data
 {
@@ -11,14 +13,18 @@ namespace WorldCities.Data
 		/// <summary>
 		/// Private constructor called by the CreateAsync method.
 		/// </summary>
-		private ApiResult(List<T> data, int count, int pageIndex, int pageSize)
+		private ApiResult(List<T> data, int count, int pageIndex, int pageSize, string sortColumn, string sortOrder, string filterColumn, string filterQuery)
 		{
 			Data = data;
 			PageIndex = pageIndex;
 			PageSize = pageSize;
 			TotalCount = count;
 			TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-		}
+			SortColumn = sortColumn;
+			SortOrder = sortOrder;
+            FilterColumn = filterColumn;
+            FilterQuery = filterQuery;
+        }
 
         #region Methods
 		/// <summary>
@@ -27,18 +33,35 @@ namespace WorldCities.Data
 		/// <param name="source">An IQueryable source of generic type</param>
 		/// <param name="pageIndex">Zero-based current page index(0 = first page)</param>
 		/// <param name="pageSize">The actual size of each page</param>
+		/// <param name="sortColumn">Sort Column Name</param>
+		/// <param name="sortOrder">Sort Column Order(Asc or Desc)</param>
+		/// <param></param>
+		/// <param></param>
 		/// <returns>
 		/// A object containing the paged result
 		/// and all the relevant paging navigation info.
 		/// </returns>
-		/// 
 
 		public static async Task<ApiResult<T>> CreateAsync(
 			IQueryable<T> source,
 			int pageIndex,
-			int pageSize)
+			int pageSize,
+			string sortColumn=null,
+			string sortOrder=null,
+			string filterColumn=null,
+			string filterQuery=null)
         {
+			if (!string.IsNullOrEmpty(filterColumn) && !string.IsNullOrEmpty(filterQuery) && IsValidProperty(filterColumn))
+            {
+				source = source.Where(string.Format("{0}.Contains(@0)", filterColumn), filterQuery);
+            }
+
 			var count = await source.CountAsync();
+			if (!string.IsNullOrEmpty(sortColumn) && IsValidProperty(sortColumn))
+			{
+				sortOrder = !string.IsNullOrEmpty(sortOrder) && sortOrder.ToUpper() == "ASC" ? "ASC" : "DESC";
+				source = source.OrderBy(string.Format("{0} {1}", sortColumn, sortOrder));
+			}
 			source = source.Skip(pageIndex * pageSize).Take(pageSize);
 
 			var data = await source.ToListAsync();
@@ -47,7 +70,11 @@ namespace WorldCities.Data
 				data,
 				count,
 				pageIndex,
-				pageSize);
+				pageSize,
+				sortColumn,
+				sortOrder,
+				filterColumn,
+				filterQuery);
 		}
         #endregion
 
@@ -98,6 +125,36 @@ namespace WorldCities.Data
 				return ((PageIndex + 1) < TotalPages);
 			}
         }
+		/// <summary>
+		/// Sorting Column name (or null if none set)
+		/// </summary>
+		public string SortColumn { get; set; }
+		
+		/// <summary>
+		/// Sorting Order ("ASC", "DESC" or null if none set)
+		/// </summary>
+		public string SortOrder { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public string FilterColumn { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public string FilterQuery { get; set; }
+
+
+		/// <summary>
+		/// checks if 
+		/// </summary>
+		public static bool IsValidProperty(string propertyName, bool throwExceptionIfNotFound = true)
+		{
+			var prop = typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+			return prop != null;
+        }
         #endregion
+		
     }
 }
