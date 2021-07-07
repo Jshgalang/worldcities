@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+
 namespace WorldCities.Data.Models
 {
     [Table("Countries")]
@@ -30,11 +32,13 @@ namespace WorldCities.Data.Models
         /// <summary>
         /// iso2 code
         /// </summary>
+        [JsonPropertyName("ISO2")]
         public string ISO2 { get; set; }
 
         /// <summary>
         /// iso3 code
         /// </summary>
+        [JsonPropertyName("ISO3")]
         public string ISO3 { get; set; }
         #endregion
 

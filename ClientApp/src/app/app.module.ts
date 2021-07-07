@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CitiesComponent } from './cities/cities.component';
+import { CountriesComponent } from './countries/countries.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material.module';
 
@@ -18,6 +19,7 @@ import { AngularMaterialModule } from './angular-material.module';
     NavMenuComponent,
     HomeComponent,
     CitiesComponent,
+    CountriesComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
