@@ -8,8 +8,9 @@ import { CountriesComponent } from './countries/countries.component';
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'GetCities', component: CitiesComponent },
-  { path: 'countries', component: CountriesComponent },
+  { path: 'city', component: CityEditComponent},
   { path: 'city/:id', component: CityEditComponent },
+  { path: 'countries', component: CountriesComponent },
 ];
 
 @NgModule({
