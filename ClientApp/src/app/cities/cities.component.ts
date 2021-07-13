@@ -55,10 +55,10 @@ export class CitiesComponent implements OnInit {
     }
 
     this.http.get<any>(url, { params }).subscribe(result => {
-      console.log(result) // ?????????????????????????
+      //console.log(result) // ?????????????????????????
       this.paginator.length = result.totalCount;
       this.paginator.pageIndex = result.pageIndex;
       this.paginator.pageSize = result.pageSize;
-      this.cities = new MatTableDataSource<City>(result.data);}, error => console.error(error))
+      this.cities = new MatTableDataSource<City>(result.data);}, error => console.error(error));
   }
 }

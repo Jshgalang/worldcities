@@ -65,7 +65,7 @@ export class CityEditComponent implements OnInit {
     // fetch all the countries from server
     var url = this.baseUrl + "api/Countries";
     var params = new HttpParams().set("pageIndex", "0")
-      .set("pageSize", "100")
+      .set("pageSize", "10")
       .set("sortColumn", "name");
     this.http.get<any>(url, { params }).subscribe(result => { this.countries = result.data; },
       error => console.error(error));
