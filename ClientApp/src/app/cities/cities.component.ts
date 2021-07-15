@@ -59,6 +59,7 @@ export class CitiesComponent implements OnInit {
       this.paginator.length = result.totalCount;
       this.paginator.pageIndex = result.pageIndex;
       this.paginator.pageSize = result.pageSize;
-      this.cities = new MatTableDataSource<City>(result.data);}, error => console.error(error));
+      this.cities = new MatTableDataSource<City>(result.data);
+    }, error => console.error(error));
   }
 }
