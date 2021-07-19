@@ -67,7 +67,7 @@ export class CityEditComponent implements OnInit {
     // fetch all the countries from server
     var url = this.baseUrl + "api/Countries";
     var params = new HttpParams().set("pageIndex", "0")
-      .set("pageSize", "200")
+      .set("pageSize", "300")
       .set("sortColumn", "name");
     this.http.get<any>(url, { params }).subscribe(result => { this.countries = result.data; },
       error => console.error(error));
@@ -108,11 +108,11 @@ export class CityEditComponent implements OnInit {
       city.id = (this.id) ? this.id : 0;
       city.name = this.form.get("name").value;
       city.lat = +this.form.get("lat").value;
-      city.lon = +this.form("lon").value;
+      city.lon = +this.form.get("lon").value;
       city.countryId = +this.form.get("countryId").value;
 
       var url = this.baseUrl + "api/Cities/IsDupeCity";
-      return this.https.post<boolean>(url, city).pipe(map(result => {
+      return this.http.post<boolean>(url, city).pipe(map(result => {
         return (result ? { isDupeCity: true } : null);
       }));
     }
