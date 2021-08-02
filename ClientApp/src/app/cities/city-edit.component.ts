@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { BaseFormComponent } from '../base.form.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, AbstractControl, AsyncValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -13,7 +14,7 @@ import { Country } from './../countries/Country';
   templateUrl: './city-edit.component.html',
   styleUrls: ['./city-edit.component.css']
 })
-export class CityEditComponent implements OnInit {
+export class CityEditComponent extends BaseFormComponent implements OnInit {
   // the view title
   title: string;
   // the form model
@@ -31,6 +32,7 @@ export class CityEditComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string) {
+    super();
   }
   ngOnInit() {
     this.form = new FormGroup({
@@ -117,4 +119,24 @@ export class CityEditComponent implements OnInit {
       }));
     }
   }
+  //// retrieve form control
+  //getControl(name: string) {
+  //  return this.form.get(name);
+  //}
+  //// boolean if form control is valid
+  //isValid(name: string) {
+  //  var e = this.getControl(name);
+  //  return e && e.valid;
+  //}
+  //// returns true if the form control has been changed
+  //isChanged(name: string) {
+  //  var e = this.getControl(name);
+  //  return e && (e.dirty || e.touched);
+  //}
+  //// returns true if the form control is raising an error,
+  //// i.e. an invalid state after user changes
+  //hasError(name: string) {
+  //  var e = this.getControl(name);
+  //  return e && (e.dirty || e.touched) && e.invalid;
+  //}
 }
