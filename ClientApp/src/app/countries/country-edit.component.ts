@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { BaseFormComponent } from '../base.form.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, AbstractControl, AsyncValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -13,7 +14,7 @@ import { Country } from './../countries/Country';
   templateUrl: './country-edit.component.html',
   styleUrls: ['./country-edit.component.css']
 })
-export class CountryEditComponent implements OnInit {
+export class CountryEditComponent extends BaseFormComponent implements OnInit {
   // the view title
   title: string;
   // the form model
@@ -30,7 +31,8 @@ export class CountryEditComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string) {
-      this.loadData();
+    super();
+    this.loadData();
   }
   ngOnInit() {
     this.form = this.fb.group({
