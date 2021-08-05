@@ -12,7 +12,7 @@ import { Country } from './country';
 })
 
 export class CountriesComponent implements OnInit {
-  public displayedColumns: string[] = ['id', 'name', 'ISO2', 'ISO3'];  
+  public displayedColumns: string[] = ['id', 'name', 'ISO2', 'ISO3', 'totCities'];  
   public countries: MatTableDataSource<Country>;
 
   defaultPageIndex: number = 0;

@@ -25,9 +25,20 @@ namespace WorldCities.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResult<Country>>> GetCountries(int pageIndex = 0, int pageSize = 10, string sortColumn = null, string sortOrder = null, string filterColumn = null, string filterQuery = null)
+		// Can be replaced CountryDTO class entity to a 'dynamic' anonymous type
+        public async Task<ActionResult<ApiResult<dynamic>>> GetCountries(int pageIndex = 0, int pageSize = 10, 
+			string sortColumn = null, string sortOrder = null, string filterColumn = null, string filterQuery = null)
         {
-            return await ApiResult<Country>.CreateAsync(_context.Countries, pageIndex, pageSize, sortColumn, sortOrder, filterColumn, filterQuery);
+            //return await ApiResult<Country>.CreateAsync(_context.Countries.Include(c => c.Cities),
+			return await ApiResult<dynamic>.CreateAsync(_context.Countries.Select(c => new
+			{ 
+				Id = c.Id,
+				Name = c.Name,
+				ISO2 = c.ISO2,
+				ISO3 = c.ISO3,
+				TotCities = c.Cities.Count
+			}),
+				pageIndex, pageSize, sortColumn, sortOrder, filterColumn, filterQuery);
         }
 
         [HttpGet("{id}")]
