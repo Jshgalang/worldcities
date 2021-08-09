@@ -49,15 +49,19 @@ namespace WorldCities.Data.Models
         ///     2: dynamic anonymity ( on the go )
         ///         cons:   a. scalability
         ///     3: this region ( secured entities )
+        ///         pros: a. Classes
         ///         cons:   a. entities are meant to be object wrappers for objects and views
         ///                 b. data is large
+        ///                 c. Sharing
+        ///                 d. SRP
+        ///                 e. Leaks
         ///                 
         ///                 :: method too specific but not meant for flexibiltiy // kitchen sink
         ///                 
         /// 
         /// The number of cities related to this country.
         /// </summary>
-        [NotMapped] // to not update in the db
+        [NotMapped] // to not update in the db ( column )
         public int TotCities
         { 
         get
