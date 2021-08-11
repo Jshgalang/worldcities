@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+//import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -7,6 +7,8 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { City } from './city';
+import { CityService } from './city.service';
+import { ApiResult } from '../base.service';
 
 @Component({
   selector: 'app-cities',
@@ -29,7 +31,7 @@ export class CitiesComponent implements OnInit {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   filterTextChanged: Subject<string> = new Subject<string>();
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
+  constructor(private cityService: CityService) {
   }
 
   ngOnInit() {
@@ -55,25 +57,34 @@ export class CitiesComponent implements OnInit {
   }
 
   getData(event: PageEvent) {
-    var url = this.baseUrl + 'api/Cities';
+    var sortColumn = (this.sort)
+      ? this.sort.active : this.defaultSortColumn;
 
-    var params = new HttpParams().set("pageIndex", event.pageIndex.toString())
-      .set("pageSize", event.pageSize.toString())
-      .set("sortColumn", (this.sort) ? this.sort.active: this.defaultSortColumn)
-      .set("sortOrder", (this.sort) ? this.sort.direction : this.defaultSortOrder);
+    var sortOrder = (this.sort)
+      ? this.sort.direction
+      : this.defaultSortOrder;
 
-    if (this.filterQuery)
-    {
-      params = params.set("filterColumn", this.defaultFilterColumn).
-        set("filterQuery", this.filterQuery)
-    }
+    var filterColumn = (this.filterQuery)
+      ? this.defaultFilterColumn
+      : null;
 
-    this.http.get<any>(url, { params }).subscribe(result => {
-      //console.log(result) // ?????????????????????????
+    var filterQuery = (this.filterQuery)
+      ? this.filterQuery
+      : null;
+
+    this.cityService.getData<ApiResult<City>>(
+      event.pageIndex,
+      event.pageSize,
+      sortColumn,
+      sortOrder,
+      filterColumn,
+      filterQuery
+    ).subscribe(result => {
       this.paginator.length = result.totalCount;
       this.paginator.pageIndex = result.pageIndex;
       this.paginator.pageSize = result.pageSize;
       this.cities = new MatTableDataSource<City>(result.data);
     }, error => console.error(error));
+    }
   }
-}
+
