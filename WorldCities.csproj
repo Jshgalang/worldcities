@@ -40,6 +40,7 @@
     <None Remove="ClientApp\src\app\base.service.ts" />
     <None Remove="ClientApp\src\app\cities\city-edit.component.ts" />
     <None Remove="ClientApp\src\app\cities\city.service.ts" />
+    <None Remove="ClientApp\src\app\countries\country.service.ts" />
   </ItemGroup>
 
   <ItemGroup>
