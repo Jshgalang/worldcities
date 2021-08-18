@@ -26,7 +26,7 @@ namespace WorldCities.Data
             FilterQuery = filterQuery;
         }
 
-        #region Methods
+		#region Methods
 		/// <summary>
 		/// Pages, sorts and/or filters a IQueryable source.
 		/// </summary>
@@ -46,15 +46,15 @@ namespace WorldCities.Data
 			IQueryable<T> source,
 			int pageIndex,
 			int pageSize,
-			string sortColumn=null,
-			string sortOrder=null,
-			string filterColumn=null,
-			string filterQuery=null)
-        {
+			string sortColumn = null,
+			string sortOrder = null,
+			string filterColumn = null,
+			string filterQuery = null)
+		{
 			if (!string.IsNullOrEmpty(filterColumn) && !string.IsNullOrEmpty(filterQuery) && IsValidProperty(filterColumn))
-            {
+			{
 				source = source.Where(string.Format("{0}.Contains(@0)", filterColumn), filterQuery);
-            }
+			}
 
 			var count = await source.CountAsync();
 			if (!string.IsNullOrEmpty(sortColumn) && IsValidProperty(sortColumn))
@@ -64,6 +64,7 @@ namespace WorldCities.Data
 			}
 			source = source.Skip(pageIndex * pageSize).Take(pageSize);
 
+			#if DEBUG{var sql = source.ToParametrizedSql();} #endif
 			var data = await source.ToListAsync();
 
 			return new ApiResult<T>(
@@ -76,9 +77,9 @@ namespace WorldCities.Data
 				filterColumn,
 				filterQuery);
 		}
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
 		/// <summary>
 		/// IQueryable data result to return.
 		/// </summary>
@@ -154,7 +155,7 @@ namespace WorldCities.Data
 			var prop = typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 			return prop != null;
         }
-        #endregion
+#endregion
 		
     }
 }
