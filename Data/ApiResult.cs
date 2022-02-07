@@ -64,7 +64,10 @@ namespace WorldCities.Data
 			}
 			source = source.Skip(pageIndex * pageSize).Take(pageSize);
 
-			#if DEBUG{var sql = source.ToParametrizedSql();} #endif
+			//#if DEBUG {
+			//var sql = source.ToParametrizedSql();
+			//} 
+			//#endif
 			var data = await source.ToListAsync();
 
 			return new ApiResult<T>(
@@ -77,7 +80,7 @@ namespace WorldCities.Data
 				filterColumn,
 				filterQuery);
 		}
-#endregion
+		#endregion
 
 #region Properties
 		/// <summary>
